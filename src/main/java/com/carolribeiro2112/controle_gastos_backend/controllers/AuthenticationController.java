@@ -1,9 +1,11 @@
 package com.carolribeiro2112.controle_gastos_backend.controllers;
 
 import com.carolribeiro2112.controle_gastos_backend.domain.user.AuthenticationDTO;
+import com.carolribeiro2112.controle_gastos_backend.domain.user.LoginResponseDTO;
 import com.carolribeiro2112.controle_gastos_backend.domain.user.RegisterDTO;
 import com.carolribeiro2112.controle_gastos_backend.domain.user.User;
 import com.carolribeiro2112.controle_gastos_backend.repositories.UserRepository;
+import com.carolribeiro2112.controle_gastos_backend.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,13 +24,17 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
