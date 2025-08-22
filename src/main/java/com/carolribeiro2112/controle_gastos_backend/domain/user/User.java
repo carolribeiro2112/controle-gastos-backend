@@ -1,6 +1,7 @@
 package com.carolribeiro2112.controle_gastos_backend.domain.user;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,6 +25,8 @@ public class User implements UserDetails {
     private String id;
     private String login;
     private String password;
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     public User(String login, String password, UserRole role){
