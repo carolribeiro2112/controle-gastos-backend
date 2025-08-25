@@ -7,6 +7,7 @@ import com.carolribeiro2112.controle_gastos_backend.domain.user.User;
 import com.carolribeiro2112.controle_gastos_backend.repositories.UserRepository;
 import com.carolribeiro2112.controle_gastos_backend.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -46,7 +47,7 @@ public class AuthenticationController {
 
         this.repository.save(newUser);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }
