@@ -49,8 +49,26 @@ O backend estará disponível em: http://localhost:8080
 
 ## 🔐 Endpoints de Autenticação
 POST /auth/login – Autentica o usuário e retorna o token JWT
+BODY:{
+  "login":"teste",
+  "password": "123456789"
+}
+
+RESPONSE:
+status code: 200 OK
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb250cm9sZS1nYXN0b3MtYXBpIiwic3ViIjoidGVzdGUtMDEiLCJleHAiOjE3NTY1ODg2Mzh9.orOey9880cuJlwXA_3EmRd-HJQAfAl97rYTH4ZnJRBQ"
+}
 
 POST /auth/register – Registra novo usuário com papel baseado na idade
+BODY:{
+    "login": "teste-01",
+    "password": "123456789",
+    "age": "25",
+    "role": "ADMIN"
+}
+RESPONSE:
+status 201 Created
 
 ## 📦 Endpoints de Despesas (exemplos) - falta ser implementado 
 GET /expenses – Lista despesas do usuário autenticado
