@@ -22,6 +22,9 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("controle-gastos-api")
                     .withSubject(user.getLogin())
+                    .withClaim("role", user.getRole().name())
+                    .withClaim("age", user.getAge())
+                    .withClaim("id", user.getId())
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
             return token;
