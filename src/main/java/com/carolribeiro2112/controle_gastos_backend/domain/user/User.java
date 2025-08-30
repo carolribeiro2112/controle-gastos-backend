@@ -25,13 +25,15 @@ public class User implements UserDetails {
     private String id;
     private String login;
     private String password;
+    private String age;
     @NotNull
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    public User(String login, String password, UserRole role){
+    public User(String login, String password, String age ,UserRole role){
         this.login = login;
         this.password = password;
+        this.age = age;
         this.role = role;
     }
 
