@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record TransactionResponseDTO(
+        String id,
         String userId,
         String description,
         BigDecimal value,

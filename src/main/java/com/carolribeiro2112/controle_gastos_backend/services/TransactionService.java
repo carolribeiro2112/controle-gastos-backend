@@ -46,6 +46,7 @@ public class TransactionService {
 
     private TransactionResponseDTO toResponseDTO(Transaction transaction) {
         return new TransactionResponseDTO(
+                transaction.getId(),
                 transaction.getUser().getId(),
                 transaction.getDescription(),
                 transaction.getValue(),
