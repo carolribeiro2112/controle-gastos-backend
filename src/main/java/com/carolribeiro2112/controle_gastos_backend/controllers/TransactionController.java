@@ -35,4 +35,10 @@ public class TransactionController {
         List<TransactionResponseDTO> transaction = transactionService.getAllTransactionsByUserId(userId);
         return ResponseEntity.ok(transaction);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTransaction(@PathVariable String id) {
+        transactionService.deleteTransactionById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
