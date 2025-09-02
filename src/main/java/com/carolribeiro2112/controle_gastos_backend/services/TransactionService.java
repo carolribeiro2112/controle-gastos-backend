@@ -6,6 +6,7 @@ import com.carolribeiro2112.controle_gastos_backend.domain.transaction.Transacti
 import com.carolribeiro2112.controle_gastos_backend.domain.transaction.TransactionType;
 import com.carolribeiro2112.controle_gastos_backend.repositories.TransactionRepository;
 import com.carolribeiro2112.controle_gastos_backend.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,5 +52,12 @@ public class TransactionService {
                 transaction.getType(),
                 transaction.getTransactionDate()
         );
+    }
+
+    public void deleteTransactionById(String id) {
+        if (!transactionRepository.existsById(id)) {
+            throw new EntityNotFoundException("Transação com ID " + id + " não encontrada.");
+        }
+        transactionRepository.deleteById(id);
     }
 }
