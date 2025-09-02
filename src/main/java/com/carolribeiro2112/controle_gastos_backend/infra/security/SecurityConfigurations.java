@@ -37,7 +37,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/transaction").hasRole("ADMIN")
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
