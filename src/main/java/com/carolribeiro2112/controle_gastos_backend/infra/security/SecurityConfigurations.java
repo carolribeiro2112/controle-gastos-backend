@@ -38,6 +38,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/transaction").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/transaction/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/transaction").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))

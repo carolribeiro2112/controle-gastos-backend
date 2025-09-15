@@ -44,6 +44,11 @@ public class TransactionService {
                 .collect(Collectors.toList());
     }
 
+    public Transaction getTransactionById(String id) {
+        return transactionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Transação com ID " + id + " não encontrada."));
+    }
+
     private TransactionResponseDTO toResponseDTO(Transaction transaction) {
         return new TransactionResponseDTO(
                 transaction.getId(),
