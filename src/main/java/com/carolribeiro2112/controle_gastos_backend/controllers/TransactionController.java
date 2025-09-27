@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/transaction")
@@ -26,9 +27,18 @@ public class TransactionController {
     private AdminUserRelationRepository relationRepository;
 
     private void verifyAdminAccess(String adminId, String userId) {
-        if(adminId.equals(userId)) {
+        // Se adminId for nulo, assume que o próprio usuário está acessando seus dados
+        if (adminId == null) {
+            // Aqui você pode adicionar uma verificação de segurança, se necessário
             return;
         }
+
+        // Se adminId for igual ao userId, é o próprio admin acessando seus dados
+        if (Objects.equals(adminId, userId)) {
+            return;
+        }
+
+        // Verifica se o admin está vinculado ao usuário
         List<AdminUserRelation> relations = relationRepository.findByAdminId(adminId);
         boolean isAdminOfUser = relations.stream()
                 .anyMatch(relation -> relation.getUser().getId().equals(userId));
