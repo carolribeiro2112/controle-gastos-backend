@@ -30,6 +30,8 @@ public class AdminUserRelationService {
         AdminUserRelation rel = new AdminUserRelation();
         rel.setAdmin(admin);
         rel.setUser(user);
+        rel.setAdminLogin(admin.getLogin());
+        rel.setUserLogin(user.getLogin());
 
         relationRepository.save(rel);
     }
