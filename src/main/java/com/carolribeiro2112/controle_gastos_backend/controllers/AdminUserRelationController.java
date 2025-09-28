@@ -32,9 +32,18 @@ public class AdminUserRelationController {
         List<AdminUserRelation> relations = relationRepository.findAll();
 
         List<BindResponseDTO> response = relations.stream()
-                .map(rel -> new BindResponseDTO(rel.getAdmin().getId(), rel.getUser().getId()))
+                .map(rel -> new BindResponseDTO(rel.getAdmin().getId(), rel.getUser().getId(), rel.getAdmin().getLogin(), rel.getUser().getLogin()))
                 .collect(Collectors.toList());
 
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/relations-by-admin/{adminId}")
+    public ResponseEntity<List<BindResponseDTO>> getRelationsByAdmin(@PathVariable String adminId) {
+        List<AdminUserRelation> relations = relationRepository.findByAdminId(adminId);
+        List<BindResponseDTO> response = relations.stream()
+                .map(rel -> new BindResponseDTO(rel.getAdmin().getId(), rel.getAdmin().getLogin(), rel.getUser().getId(), rel.getUser().getLogin()))
+                .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 }

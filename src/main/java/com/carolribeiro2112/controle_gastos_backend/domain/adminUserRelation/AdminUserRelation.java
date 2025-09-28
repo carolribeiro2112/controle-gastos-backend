@@ -23,6 +23,12 @@ public class AdminUserRelation {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(name = "admin_login")
+    private String adminLogin;
+
+    @Column(name = "user_login")
+    private String userLogin;
+
     @ManyToOne
     @JoinColumn(name = "admin_id", nullable = false)
     private User admin;

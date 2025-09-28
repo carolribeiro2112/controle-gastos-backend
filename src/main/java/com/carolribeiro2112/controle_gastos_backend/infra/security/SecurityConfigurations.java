@@ -40,7 +40,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.DELETE, "/transaction/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/transaction").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/admin/bind").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
