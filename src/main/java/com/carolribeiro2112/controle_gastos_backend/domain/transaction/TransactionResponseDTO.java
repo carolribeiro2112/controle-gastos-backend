@@ -9,6 +9,7 @@ public record TransactionResponseDTO(
         String description,
         BigDecimal value,
         TransactionType type,
+        TransactionCategory category,
         LocalDateTime transactionDate
 ) {
 }

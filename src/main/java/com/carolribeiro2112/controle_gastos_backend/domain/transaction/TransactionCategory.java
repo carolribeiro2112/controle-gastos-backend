@@ -12,5 +12,6 @@ public enum TransactionCategory {
     RENT,
     SALARY,
     INVESTMENTS,
-    OTHER
+    OTHER,
+    PETS
 }

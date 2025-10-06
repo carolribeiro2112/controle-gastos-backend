@@ -1,9 +1,6 @@
 package com.carolribeiro2112.controle_gastos_backend.services;
 
-import com.carolribeiro2112.controle_gastos_backend.domain.transaction.Transaction;
-import com.carolribeiro2112.controle_gastos_backend.domain.transaction.TransactionDTO;
-import com.carolribeiro2112.controle_gastos_backend.domain.transaction.TransactionResponseDTO;
-import com.carolribeiro2112.controle_gastos_backend.domain.transaction.TransactionType;
+import com.carolribeiro2112.controle_gastos_backend.domain.transaction.*;
 import com.carolribeiro2112.controle_gastos_backend.repositories.TransactionRepository;
 import com.carolribeiro2112.controle_gastos_backend.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,7 +20,7 @@ public class TransactionService {
     @Autowired
     private UserRepository userRepository;
 
-    public Transaction saveTransaction(String userId, TransactionType type, String description, BigDecimal value) {
+    public Transaction saveTransaction(String userId, TransactionType type, String description, TransactionCategory category, BigDecimal value) {
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -31,6 +28,7 @@ public class TransactionService {
         transaction.setUser(user);
         transaction.setType(type);
         transaction.setDescription(description);
+        transaction.setCategory(category);
         transaction.setValue(value);
         transaction.setTransactionDate(LocalDateTime.now());
 
@@ -56,6 +54,7 @@ public class TransactionService {
                 transaction.getDescription(),
                 transaction.getValue(),
                 transaction.getType(),
+                transaction.getCategory(),
                 transaction.getTransactionDate()
         );
     }
