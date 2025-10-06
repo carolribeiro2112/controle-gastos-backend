@@ -59,6 +59,7 @@ public class TransactionController {
                 transactionDTO.userId(),
                 transactionDTO.type(),
                 transactionDTO.description(),
+                transactionDTO.category(),
                 transactionDTO.value()
         );
         return ResponseEntity.status(HttpStatus.CREATED).build();

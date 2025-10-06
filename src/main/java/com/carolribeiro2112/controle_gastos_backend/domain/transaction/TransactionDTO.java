@@ -9,6 +9,7 @@ public record TransactionDTO(
     @NotBlank String userId,
     String description,
     @NotNull BigDecimal value,
-    @NotNull TransactionType type
+    @NotNull TransactionType type,
+    @NotNull TransactionCategory category
 ) {
 }

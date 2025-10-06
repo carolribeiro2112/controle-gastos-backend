@@ -22,6 +22,9 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
+    @Enumerated(EnumType.STRING)
+    private TransactionCategory category;
+
     private BigDecimal value;
 
     private String description;
