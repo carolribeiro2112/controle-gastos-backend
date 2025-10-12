@@ -1,18 +1,18 @@
 package com.carolribeiro2112.controle_gastos_backend.controllers;
 
 import com.carolribeiro2112.controle_gastos_backend.domain.adminUserRelation.AdminUserRelation;
-import com.carolribeiro2112.controle_gastos_backend.domain.transaction.Transaction;
-import com.carolribeiro2112.controle_gastos_backend.domain.transaction.TransactionDTO;
-import com.carolribeiro2112.controle_gastos_backend.domain.transaction.TransactionResponseDTO;
+import com.carolribeiro2112.controle_gastos_backend.domain.transaction.*;
 import com.carolribeiro2112.controle_gastos_backend.repositories.AdminUserRelationRepository;
 import com.carolribeiro2112.controle_gastos_backend.services.TransactionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -68,11 +68,13 @@ public class TransactionController {
     @GetMapping
     public ResponseEntity<List<TransactionResponseDTO>> getAllTransactionsByUser(
             @RequestHeader(value = "adminId", required = false) String adminId,
-            @RequestParam String userId
+            @RequestParam String userId,
+            @RequestParam(required = false) TransactionCategory category,
+            @RequestParam(required = false) TransactionType type
     ) {
         verifyAdminAccess(adminId, userId);
 
-        List<TransactionResponseDTO> transaction = transactionService.getAllTransactionsByUserId(userId);
+        List<TransactionResponseDTO> transaction = transactionService.getFilteredTransactions(userId, category, type);
         return ResponseEntity.ok(transaction);
     }
 

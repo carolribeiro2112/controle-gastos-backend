@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,11 +37,19 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public List<TransactionResponseDTO> getAllTransactionsByUserId(String userId) {
-        List<Transaction> transactions = transactionRepository.findByUserId(userId);
+    public List<TransactionResponseDTO> getFilteredTransactions(String userId, TransactionCategory category, TransactionType type) {
+        List<Transaction> transactions = transactionRepository.findByFilters(userId, category, type);
         return transactions.stream()
-                .map(this::toResponseDTO)
-                .collect(Collectors.toList());
+                .map(t -> new TransactionResponseDTO(
+                        t.getId(),
+                        t.getUser().getId(),
+                        t.getDescription(),
+                        t.getValue(),
+                        t.getType(),
+                        t.getCategory(),
+                        t.getTransactionDate()
+                ))
+                .toList();
     }
 
     public Transaction getTransactionById(String id) {
