@@ -13,11 +13,11 @@ import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, String> {
     @Query("SELECT t FROM Transaction t WHERE t.user.id = :userId " +
-            "AND (:category IS NULL OR t.category = :category) " +
+            "AND (:categories IS NULL OR t.category IN :categories) " +
             "AND (:type IS NULL OR t.type = :type)")
     List<Transaction> findByFilters(
             @Param("userId") String userId,
-            @Param("category") TransactionCategory category,
+            @Param("categories") List<TransactionCategory> categories,
             @Param("type") TransactionType type
     );
 }
