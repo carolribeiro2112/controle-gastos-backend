@@ -69,7 +69,7 @@ public class TransactionController {
     public ResponseEntity<List<TransactionResponseDTO>> getAllTransactionsByUser(
             @RequestHeader(value = "adminId", required = false) String adminId,
             @RequestParam String userId,
-            @RequestParam(required = false) TransactionCategory category,
+            @RequestParam(required = false) List<TransactionCategory> category,
             @RequestParam(required = false) TransactionType type
     ) {
         verifyAdminAccess(adminId, userId);

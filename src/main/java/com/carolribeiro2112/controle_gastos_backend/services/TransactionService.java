@@ -37,8 +37,8 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public List<TransactionResponseDTO> getFilteredTransactions(String userId, TransactionCategory category, TransactionType type) {
-        List<Transaction> transactions = transactionRepository.findByFilters(userId, category, type);
+    public List<TransactionResponseDTO> getFilteredTransactions(String userId, List<TransactionCategory> categories, TransactionType type) {
+        List<Transaction> transactions = transactionRepository.findByFilters(userId, categories, type);
         return transactions.stream()
                 .map(t -> new TransactionResponseDTO(
                         t.getId(),
