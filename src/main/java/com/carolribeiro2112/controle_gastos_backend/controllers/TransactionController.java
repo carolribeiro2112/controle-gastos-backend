@@ -73,7 +73,7 @@ public class TransactionController {
             @RequestParam String userId,
             @RequestParam(required = false) List<TransactionCategory> category,
             @RequestParam(required = false) TransactionType type,
-            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "transactionDate") String sortBy,
             @RequestParam(defaultValue = "DESC") String sortDirection
