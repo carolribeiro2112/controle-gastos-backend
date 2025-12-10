@@ -5,6 +5,8 @@ import com.carolribeiro2112.controle_gastos_backend.repositories.TransactionRepo
 import com.carolribeiro2112.controle_gastos_backend.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -37,9 +39,9 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public List<TransactionResponseDTO> getFilteredTransactions(String userId, List<TransactionCategory> categories, TransactionType type) {
-        List<Transaction> transactions = transactionRepository.findByFilters(userId, categories, type);
-        return transactions.stream()
+    public Page<TransactionResponseDTO> getFilteredTransactions(String userId, List<TransactionCategory> categories, TransactionType type, Pageable pageable) {
+        Page<Transaction> transactions = transactionRepository.findByFilters(userId, categories, type, pageable);
+        return transactions
                 .map(t -> new TransactionResponseDTO(
                         t.getId(),
                         t.getUser().getId(),
@@ -48,8 +50,7 @@ public class TransactionService {
                         t.getType(),
                         t.getCategory(),
                         t.getTransactionDate()
-                ))
-                .toList();
+                ));
     }
 
     public Transaction getTransactionById(String id) {

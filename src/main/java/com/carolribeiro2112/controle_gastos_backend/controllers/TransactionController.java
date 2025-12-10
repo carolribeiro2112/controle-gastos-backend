@@ -6,13 +6,15 @@ import com.carolribeiro2112.controle_gastos_backend.repositories.AdminUserRelati
 import com.carolribeiro2112.controle_gastos_backend.services.TransactionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,15 +68,25 @@ public class TransactionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TransactionResponseDTO>> getAllTransactionsByUser(
+    public ResponseEntity<Page<TransactionResponseDTO>> getAllTransactionsByUser(
             @RequestHeader(value = "adminId", required = false) String adminId,
             @RequestParam String userId,
             @RequestParam(required = false) List<TransactionCategory> category,
-            @RequestParam(required = false) TransactionType type
+            @RequestParam(required = false) TransactionType type,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "transactionDate") String sortBy,
+            @RequestParam(defaultValue = "DESC") String sortDirection
     ) {
         verifyAdminAccess(adminId, userId);
 
-        List<TransactionResponseDTO> transaction = transactionService.getFilteredTransactions(userId, category, type);
+        Sort sort = sortDirection.equalsIgnoreCase("DESC")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<TransactionResponseDTO> transaction = transactionService.getFilteredTransactions(userId, category, type, pageable);
         return ResponseEntity.ok(transaction);
     }
 

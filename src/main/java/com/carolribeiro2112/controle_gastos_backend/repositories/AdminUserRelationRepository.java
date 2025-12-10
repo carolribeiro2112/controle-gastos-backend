@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface AdminUserRelationRepository extends JpaRepository<AdminUserRelation, String> {
     List<AdminUserRelation> findByAdminId(String adminId);
-    List<AdminUserRelation> findByUserId(String userId);
 }
