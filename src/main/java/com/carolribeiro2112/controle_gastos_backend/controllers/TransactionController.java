@@ -68,17 +68,23 @@ public class TransactionController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<TransactionResponseDTO>> getAllTransactionsByUser(
+    public ResponseEntity<?> getAllTransactionsByUser(
             @RequestHeader(value = "adminId", required = false) String adminId,
             @RequestParam String userId,
             @RequestParam(required = false) List<TransactionCategory> category,
             @RequestParam(required = false) TransactionType type,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
             @RequestParam(defaultValue = "transactionDate") String sortBy,
             @RequestParam(defaultValue = "DESC") String sortDirection
     ) {
         verifyAdminAccess(adminId, userId);
+
+        if (page == null || size == null) {
+            List<TransactionResponseDTO> transactions =
+                    transactionService.getFilteredTransactionsNoPagination(userId, type);
+            return ResponseEntity.ok(transactions);
+        }
 
         Sort sort = sortDirection.equalsIgnoreCase("DESC")
                 ? Sort.by(sortBy).descending()

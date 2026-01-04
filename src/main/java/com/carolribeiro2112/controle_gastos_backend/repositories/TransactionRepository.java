@@ -12,6 +12,11 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, String> {
+    @Query("SELECT t FROM Transaction t WHERE t.user.id = :userId ")
+    List<Transaction> findAll(
+            @Param("userId") String userId
+    );
+
     @Query("SELECT t FROM Transaction t WHERE t.user.id = :userId " +
             "AND (:categories IS NULL OR t.category IN :categories) " +
             "AND (:type IS NULL OR t.type = :type)")
