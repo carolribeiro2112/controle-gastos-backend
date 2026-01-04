@@ -10,11 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
@@ -51,6 +48,24 @@ public class TransactionService {
                         t.getCategory(),
                         t.getTransactionDate()
                 ));
+    }
+
+    public List<TransactionResponseDTO> getFilteredTransactionsNoPagination(
+            String userId,
+            TransactionType type
+    ) {
+        List<Transaction> transactions = transactionRepository.findAll(userId);
+        return transactions.stream()
+                .map(t -> new TransactionResponseDTO(
+                        t.getId(),
+                        t.getUser().getId(),
+                        t.getDescription(),
+                        t.getValue(),
+                        t.getType(),
+                        t.getCategory(),
+                        t.getTransactionDate()
+                ))
+                .toList();
     }
 
     public Transaction getTransactionById(String id) {
