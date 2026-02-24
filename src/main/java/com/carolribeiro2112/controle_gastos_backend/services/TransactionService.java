@@ -36,8 +36,8 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public Page<TransactionResponseDTO> getFilteredTransactions(String userId, List<TransactionCategory> categories, TransactionType type, Pageable pageable) {
-        Page<Transaction> transactions = transactionRepository.findByFilters(userId, categories, type, pageable);
+    public Page<TransactionResponseDTO> getFilteredTransactions(String userId, List<TransactionCategory> categories, TransactionType type, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
+        Page<Transaction> transactions = transactionRepository.findByFilters(userId, categories, type, startDate, endDate, pageable);
         return transactions
                 .map(t -> new TransactionResponseDTO(
                         t.getId(),
