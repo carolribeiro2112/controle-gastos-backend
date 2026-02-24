@@ -10,11 +10,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -73,6 +75,8 @@ public class TransactionController {
             @RequestParam String userId,
             @RequestParam(required = false) List<TransactionCategory> category,
             @RequestParam(required = false) TransactionType type,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size,
             @RequestParam(defaultValue = "transactionDate") String sortBy,
@@ -80,7 +84,7 @@ public class TransactionController {
     ) {
         verifyAdminAccess(adminId, userId);
 
-        if (page == null || size == null) {
+        if (page == null || size == null ||startDate == null && endDate == null) {
             List<TransactionResponseDTO> transactions =
                     transactionService.getFilteredTransactionsNoPagination(userId, type);
             return ResponseEntity.ok(transactions);
@@ -92,7 +96,7 @@ public class TransactionController {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<TransactionResponseDTO> transaction = transactionService.getFilteredTransactions(userId, category, type, pageable);
+        Page<TransactionResponseDTO> transaction = transactionService.getFilteredTransactions(userId, category, type, startDate, endDate, pageable);
         return ResponseEntity.ok(transaction);
     }
 
