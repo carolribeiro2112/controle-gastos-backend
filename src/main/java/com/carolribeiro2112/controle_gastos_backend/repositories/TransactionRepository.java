@@ -21,8 +21,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
     @Query("SELECT t FROM Transaction t WHERE t.user.id = :userId " +
             "AND (:categories IS NULL OR t.category IN :categories) " +
             "AND (:type IS NULL OR t.type = :type)" +
-            "AND (:startDate IS NULL OR t.transactionDate >= :startDate) " +
-            "AND (:endDate IS NULL OR t.transactionDate <= :endDate)")
+            "AND t.transactionDate >= :startDate " +
+            "AND t.transactionDate <= :endDate")
     Page<Transaction> findByFilters(
             @Param("userId") String userId,
             @Param("categories") List<TransactionCategory> categories,
