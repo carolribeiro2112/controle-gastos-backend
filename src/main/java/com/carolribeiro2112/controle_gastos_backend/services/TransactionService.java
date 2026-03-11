@@ -10,7 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -36,7 +38,22 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public Page<TransactionResponseDTO> getFilteredTransactions(String userId, List<TransactionCategory> categories, TransactionType type, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
+    public Page<TransactionResponseDTO> getFilteredTransactions(
+            String userId,
+            List<TransactionCategory> categories,
+            TransactionType type,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            Pageable pageable
+    ) {
+        if (startDate == null) {
+            startDate = LocalDateTime.of(1970, 1, 1, 0, 0);
+        }
+
+        if (endDate == null) {
+            endDate = LocalDate.now().atTime(LocalTime.MAX);
+        }
+
         Page<Transaction> transactions = transactionRepository.findByFilters(userId, categories, type, startDate, endDate, pageable);
         return transactions
                 .map(t -> new TransactionResponseDTO(

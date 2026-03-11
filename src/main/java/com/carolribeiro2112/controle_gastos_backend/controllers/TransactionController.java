@@ -16,7 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -69,34 +71,33 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAllTransactionsByUser(
+    @GetMapping public ResponseEntity<?> getAllTransactionsByUser(
             @RequestHeader(value = "adminId", required = false) String adminId,
             @RequestParam String userId,
             @RequestParam(required = false) List<TransactionCategory> category,
             @RequestParam(required = false) TransactionType type,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size,
             @RequestParam(defaultValue = "transactionDate") String sortBy,
-            @RequestParam(defaultValue = "DESC") String sortDirection
-    ) {
+            @RequestParam(defaultValue = "DESC") String sortDirection ) {
         verifyAdminAccess(adminId, userId);
+        // 🔧 Normalização logo no início
+        LocalDateTime startDateTime = (startDate != null)
+                ? startDate
+                : LocalDateTime.of(1970, 1, 1, 0, 0);
 
-        if (page == null || size == null ||startDate == null && endDate == null) {
-            List<TransactionResponseDTO> transactions =
-                    transactionService.getFilteredTransactionsNoPagination(userId, type);
+        LocalDateTime endDateTime = (endDate != null) ? endDate : LocalDate.now().atTime(LocalTime.MAX);
+
+        if (page == null || size == null) { List<TransactionResponseDTO> transactions = transactionService.getFilteredTransactionsNoPagination(userId, type);
             return ResponseEntity.ok(transactions);
         }
 
-        Sort sort = sortDirection.equalsIgnoreCase("DESC")
-                ? Sort.by(sortBy).descending()
-                : Sort.by(sortBy).ascending();
-
+        Sort sort = sortDirection.equalsIgnoreCase("DESC") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
-
-        Page<TransactionResponseDTO> transaction = transactionService.getFilteredTransactions(userId, category, type, startDate, endDate, pageable);
+        Page<TransactionResponseDTO> transaction = transactionService.getFilteredTransactions(userId, category, type, startDateTime, endDateTime, pageable);
         return ResponseEntity.ok(transaction);
     }
 
