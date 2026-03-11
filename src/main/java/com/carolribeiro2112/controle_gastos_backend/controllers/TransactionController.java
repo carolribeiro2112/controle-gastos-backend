@@ -76,8 +76,7 @@ public class TransactionController {
             @RequestParam String userId,
             @RequestParam(required = false) List<TransactionCategory> category,
             @RequestParam(required = false) TransactionType type,
-            @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size,
@@ -89,13 +88,20 @@ public class TransactionController {
                 ? startDate
                 : LocalDateTime.of(1970, 1, 1, 0, 0);
 
-        LocalDateTime endDateTime = (endDate != null) ? endDate : LocalDate.now().atTime(LocalTime.MAX);
+        LocalDateTime endDateTime = (endDate != null)
+                ? endDate
+                : LocalDate.now().atTime(LocalTime.MAX);
 
-        if (page == null || size == null) { List<TransactionResponseDTO> transactions = transactionService.getFilteredTransactionsNoPagination(userId, type);
+        if (page == null || size == null) {
+            List<TransactionResponseDTO> transactions =
+                    transactionService.getFilteredTransactionsNoPagination(userId, type);
             return ResponseEntity.ok(transactions);
         }
 
-        Sort sort = sortDirection.equalsIgnoreCase("DESC") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Sort sort = sortDirection.equalsIgnoreCase("DESC")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<TransactionResponseDTO> transaction = transactionService.getFilteredTransactions(userId, category, type, startDateTime, endDateTime, pageable);
         return ResponseEntity.ok(transaction);
